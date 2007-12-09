@@ -1,0 +1,12 @@
+#Fat Jar Configuration File
+#Sat Nov 24 08:56:51 CST 2007
+onejar.license.required=false
+onejar.checkbox=false
+jarname=ChineseSegment(All).jar
+manifest.mergeall=true
+manifest.mainclass=com.novse.segmentation.view.ChineseSegmentFrame
+manifest.file=<createnew>
+jarname.isextern=false
+onejar.expand=
+excludes=<po|ChineseSegment>~com/~novse/~segmentation/~unlistedword/~name/~test/;<po|ChineseSegment>~com/~novse/~segmentation/~unlistedword/~test/;<po|ChineseSegment>~com/~novse/~segmentation/~test/;<po|ChineseSegment>~com/~novse/~segmentation/~dic/;<po|ChineseSegment>~edu/;<po|ChineseSegment>~testlucene/;<jar|junit.jar>
+includes=

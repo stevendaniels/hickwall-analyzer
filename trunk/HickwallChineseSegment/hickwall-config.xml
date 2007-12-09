@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<!-- 词典属性编辑器 -->
+	<bean id="diagramDictionaryEditor"
+		class="com.novse.segmentation.spring.ioc.DictionaryPropertyEditor">
+		<constructor-arg>
+			<value>
+				com.novse.segmentation.core.matching.dictionary.DiagramDictionary
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="hashDictionaryEditor"
+		class="com.novse.segmentation.spring.ioc.DictionaryPropertyEditor">
+		<constructor-arg>
+			<value>
+				com.novse.segmentation.core.matching.dictionary.HashDictionary
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="chineseNameDictionaryEditor"
+		class="com.novse.segmentation.spring.ioc.DictionaryPropertyEditor">
+		<constructor-arg>
+			<value>
+				com.novse.segmentation.core.unlistedword.dictionary.ChineseNameDictionary
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="notChineseNameDictionaryEditor"
+		class="com.novse.segmentation.spring.ioc.DictionaryPropertyEditor">
+		<constructor-arg>
+			<value>
+				com.novse.segmentation.core.unlistedword.dictionary.NotChineseNameDictionary
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<!-- 属性编辑器，负责将文本格式的字符串转换为bean -->
+	<bean id="customEditorBean"
+		class="org.springframework.beans.factory.config.CustomEditorConfigurer"
+		abstract="false" singleton="true" lazy-init="default"
+		autowire="default" dependency-check="default">
+		<property name="customEditors">
+			<map>
+				<entry
+					key="com.novse.segmentation.core.matching.dictionary.DiagramDictionary">
+					<ref bean="diagramDictionaryEditor" />
+				</entry>
+				<entry
+					key="com.novse.segmentation.core.matching.dictionary.HashDictionary">
+					<ref bean="hashDictionaryEditor" />
+				</entry>
+				<entry
+					key="com.novse.segmentation.core.unlistedword.dictionary.ChineseNameDictionary">
+					<ref bean="chineseNameDictionaryEditor" />
+				</entry>
+				<entry
+					key="com.novse.segmentation.core.unlistedword.dictionary.NotChineseNameDictionary">
+					<ref bean="notChineseNameDictionaryEditor" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<!-- 基于统计的词汇识别器 -->
+	<bean id="basedSuffixArrayStringFetcherBean"
+		class="com.novse.segmentation.core.statistic.fetcher.BasedSuffixArrayStringFetcher">
+		<property name="maxConfidence">
+			<value>0.8</value>
+		</property>
+		<property name="minConfidence">
+			<value>0.3</value>
+		</property>
+	</bean>
+
+	<bean id="basicStatisticStringFetcherBean"
+		class="com.novse.segmentation.core.statistic.fetcher.BasicStatisticStringFetcher">
+		<constructor-arg index="0">
+			<bean id="setPointPostProcessorBean"
+				class="com.novse.segmentation.core.statistic.basic.SetpointPostProcessor">
+				<property name="setpoint">
+					<value>0.55</value>
+				</property>
+			</bean>
+		</constructor-arg>
+	</bean>
+
+	<!-- 中文姓名识别获得的姓名库 -->
+	<bean id="tempNameList"
+		class="java.util.HashMap">
+	</bean>
+
+	<!-- 中文姓名识别器 -->
+	<bean id="simpleChineseNameAnalyzer"
+		class="com.novse.segmentation.core.unlistedword.name.SimpleChineseNameAnalyzer">
+		<constructor-arg index="0">
+			<value type="com.novse.segmentation.core.unlistedword.dictionary.ChineseNameDictionary">Dic/Name.stu</value>
+		</constructor-arg>
+		<constructor-arg index="1">
+			<value type="com.novse.segmentation.core.unlistedword.dictionary.NotChineseNameDictionary">Dic/UnName.stu</value>
+		</constructor-arg>
+		<constructor-arg index="2">
+			<ref bean="tempNameList" />
+		</constructor-arg>
+		<constructor-arg index="3">
+			<value type="com.novse.segmentation.core.matching.dictionary.HashDictionary">Dic/HashLeftVerge.stu</value>
+		</constructor-arg>
+		<constructor-arg index="4">
+			<value type="com.novse.segmentation.core.matching.dictionary.HashDictionary">Dic/HashRightVerge.stu</value>
+		</constructor-arg>
+		<property name="setpoint">
+			<value>0.2</value>
+		</property>
+	</bean>
+
+	<!-- 未登录词识别Aspect实现 -->
+	<bean id="unListedWordAnaylyzerInterceptor"
+		class="com.novse.segmentation.spring.aop.advice.UnListedWordAnalyzerInterceptor">
+		<constructor-arg index="0">
+			<ref bean="simpleChineseNameAnalyzer" />
+		</constructor-arg>
+	</bean>
+	
+	<!-- 日志记录的Aspect实现 -->
+	<!--
+	<bean id="logInterceptor"
+		class="com.novse.segmentation.spring.aop.advice.LogInterceptor">
+	</bean>
+	
+	<bean id="logThrowAdvice"
+		class="com.novse.segmentation.spring.aop.advice.LogThrowAdvice">
+	</bean>
+	-->
+
+	<!-- 用于textProcess方法PonitCut -->
+	<bean id="textProcessAdvisor"
+		class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+		<property name="mappedName">
+			<value>textProcess</value>
+		</property>
+		<property name="advice">
+			<ref bean="unListedWordAnaylyzerInterceptor" />
+		</property>
+	</bean>
+
+	<!-- 基于词典分词算法 -->
+	<bean id="maxMatchSegmentBean"
+		class="com.novse.segmentation.core.matching.processor.MaxMatchSegmentProcessor">
+		<constructor-arg index="0">
+			<value type="com.novse.segmentation.core.matching.dictionary.DiagramDictionary">Dic/DiagramDic.stu</value>
+		</constructor-arg>
+		<constructor-arg index="1">
+			<ref bean="basicStatisticStringFetcherBean" />
+		</constructor-arg>
+	</bean>
+
+	<bean id="reverseMaxMatchSegmentBean"
+		class="com.novse.segmentation.core.matching.processor.ReverseMaxMatchSegmentProcessor">
+		<constructor-arg index="0">
+			<value type="com.novse.segmentation.core.matching.dictionary.HashDictionary">Dic/HashDic.stu</value>
+		</constructor-arg>
+		<constructor-arg index="1">
+			<ref bean="basicStatisticStringFetcherBean" />
+		</constructor-arg>
+	</bean>
+
+	<!-- 集成中文姓名识别的分词构件 -->
+	<bean id="maxMatchSegmentProxy"
+		class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces">
+			<value>
+				com.novse.segmentation.core.SegmentProcessor
+			</value>
+		</property>
+		<property name="target">
+			<ref bean="maxMatchSegmentBean" />
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>textProcessAdvisor</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="reverseMaxMatchSegmentProxy"
+		class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces">
+			<value>
+				com.novse.segmentation.core.SegmentProcessor
+			</value>
+		</property>
+		<property name="target">
+			<ref bean="reverseMaxMatchSegmentBean" />
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>textProcessAdvisor</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Lucene分词构件 -->
+	<bean id="hickwallQueryAnalyzer"
+		class="com.novse.segmentation.lucene.analysis.query.HickwallQueryAnalyzer">
+		<constructor-arg>
+			<ref bean="reverseMaxMatchSegmentProxy" />
+		</constructor-arg>
+	</bean>
+	
+	<bean id="hickwallIndexAnalyzer"
+		class="com.novse.segmentation.lucene.analysis.index.HickwallIndexAnalyzer">
+		<constructor-arg>
+			<ref bean="reverseMaxMatchSegmentProxy" />
+		</constructor-arg>
+	</bean>
+
+</beans>

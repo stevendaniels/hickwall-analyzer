@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+	<bean id="simpleDictionaryEditor" class="com.novse.segmentation.spring.ioc.DictionaryPropertyEditor">
+		<constructor-arg>
+			<value>com.novse.segmentation.core.matching.dictionary.SimpleDictionary</value>
+		</constructor-arg>
+	</bean>	
+	<bean id="hashDictionaryEditor" class="com.novse.segmentation.spring.ioc.DictionaryPropertyEditor">
+		<constructor-arg>
+			<value>com.novse.segmentation.core.matching.dictionary.HashDictionary</value>
+		</constructor-arg>
+	</bean>		
+	<bean id="doubleHashDictionaryEditor" class="com.novse.segmentation.spring.ioc.DictionaryPropertyEditor">
+		<constructor-arg>
+			<value>com.novse.segmentation.core.matching.dictionary.DoubleHashDictionary</value>
+		</constructor-arg>
+	</bean>	
+
+	<bean id="customEditorBean"
+		class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+		<property name="customEditors">
+			<map>
+				<entry key="com.novse.segmentation.core.matching.dictionary.SimpleDictionary">
+					<ref bean="simpleDictionaryEditor" />
+				</entry>
+				<entry key="com.novse.segmentation.core.matching.dictionary.HashDictionary">
+					<ref bean="hashDictionaryEditor" />
+				</entry>
+				<entry key="com.novse.segmentation.core.matching.dictionary.DoubleHashDictionary">
+					<ref bean="doubleHashDictionaryEditor" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="maxMatchSegmentBean"
+		class="com.novse.segmentation.core.matching.processor.MaxMatchSegmentProcessor"
+		abstract="false" singleton="true" lazy-init="default"
+		autowire="default" dependency-check="default">
+		<constructor-arg index="0">
+			<value type="com.novse.segmentation.core.matching.dictionary.HashDictionary">Dic/HashDic.stu</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="reverseMaxMatchSegmentBean"
+		class="com.novse.segmentation.core.matching.processor.ReverseMaxMatchSegmentProcessor"
+		abstract="false" singleton="true" lazy-init="default"
+		autowire="default" dependency-check="default">
+		<constructor-arg index="0">
+			<value type="com.novse.segmentation.core.matching.dictionary.HashDictionary">Dic/HashDic.stu</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="hickwallQueryAnalyzer"
+		class="com.novse.segmentation.lucene.analysis.query.HickwallQueryAnalyzer">
+		<constructor-arg>
+			<ref bean="maxMatchSegmentBean" />		
+		</constructor-arg>	
+	</bean>
+	
+	<bean id="hickwallIndexAnalyzer"
+		class="com.novse.segmentation.lucene.analysis.index.HickwallIndexAnalyzer">
+		<constructor-arg>
+			<ref bean="reverseMaxMatchSegmentBean" />
+		</constructor-arg>
+	</bean>
+
+</beans>
