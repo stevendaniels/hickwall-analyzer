@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry path="src" kind="src"/>
+	<classpathentry path="junit" kind="src"/>
+	<classpathentry path="example" kind="src"/>
+	<classpathentry path="org.eclipse.jdt.launching.JRE_CONTAINER" kind="con"/>
+	<classpathentry path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3.8.1" kind="con"/>
+	<classpathentry path="melibrary.com.genuitec.eclipse.springframework.MYECLIPSE_SPRING12_CORE" kind="con"/>
+	<classpathentry sourcepath="E:/JAVA/Lucene/lucene-2.0.0-src" path="E:/JAVA/Lucene/lucene-2.0.0/lucene-core-2.0.0.jar" kind="lib"/>
+	<classpathentry path="melibrary.com.genuitec.eclipse.springframework.MYECLIPSE_SPRING12_AOP" kind="con"/>
+	<classpathentry path="log" kind="lib"/>
+	<classpathentry path="bin" kind="output"/>
+</classpath>

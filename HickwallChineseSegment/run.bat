@@ -1,0 +1,1 @@
+java -jar -Xms128M -Xmx256M ChineseSegment(All).jar
