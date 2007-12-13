@@ -20,12 +20,15 @@ import com.novse.segmentation.core.statistic.fetcher.StringFetcher;
 import com.novse.segmentation.lucene.analysis.StopWordMaker;
 
 /**
- * @author Mac Kwan 基于词典匹配的中文分词抽象类
+ * 基于词典匹配的中文分词抽象类
+ * 
+ * @author Mac Kwan 
  */
 public abstract class AbstractSegmentProcessor implements SegmentProcessor
 {
     /**
      * 词典操作类
+     *
      */
     protected Dictionary dic = null;
 
