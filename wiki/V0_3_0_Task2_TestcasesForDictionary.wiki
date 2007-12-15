@@ -1,8 +1,7 @@
 #summary 为Dictionary接口及其实现类编写测试用例
 
-= Introduction =
-
-Add your content here.
+= 简述 =
+    在以词典匹配的中文分词算法里，词典充当一个十分重要的角色。此个Task就是为词典类编写测试用例，尽量确保词典类的正确运行，并为此后对词典的重构确立信心。
 
 
 = Details =
