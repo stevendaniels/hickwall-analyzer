@@ -11,5 +11,4 @@ public class DictionaryTest extends TestCase {
 	protected void tearDown() throws Exception {
 		super.tearDown();
 	}
-
 }
