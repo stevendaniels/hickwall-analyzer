@@ -1,4 +1,4 @@
-#summary *为Dictionary接口及其实现类编写测试用例*
+#summary 为Dictionary接口及其实现类编写测试用例
 
 = Introduction =
 
