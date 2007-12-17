@@ -4,9 +4,7 @@
     在以词典匹配的中文分词算法里，词典充当一个十分重要的角色。此个Task就是为词典类编写测试用例，尽量确保词典类的正确运行，并为此后对词典的重构确立信心。
 
 
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+= 详述 =
+    
+*测试用例的类型*
+此次对Dictionary相关类的测试主要分*使用外部数据的测试用例*与*不使用外部数据的测试用例*。使用外部数据的测试用例必须实现接口ResourceRequired，此接口为标记接口，不包含任何操作。而不使用外部数据的测试用例不作具体的要求。
