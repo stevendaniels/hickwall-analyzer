@@ -8,3 +8,6 @@
     
 *测试用例的类型*
 此次对Dictionary相关类的测试主要分*使用外部数据的测试用例*与*不使用外部数据的测试用例*。使用外部数据的测试用例必须实现接口ResourceRequired，此接口为标记接口，不包含任何操作。而不使用外部数据的测试用例不作具体的要求。
+
+*对Dictionary接口的分析*
+Dictionary定义主要方法有: insertWord(String), insertWord(List<String>), deleteWord(String), deleteWord(List<String>), match(String), print(PrintStream)。
