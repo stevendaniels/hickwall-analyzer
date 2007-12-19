@@ -1,0 +1,13 @@
+#summary 修改各个词典实例的批量插入、批量删除，加快批量操作的速度。
+
+= Introduction =
+
+Add your content here.
+
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
