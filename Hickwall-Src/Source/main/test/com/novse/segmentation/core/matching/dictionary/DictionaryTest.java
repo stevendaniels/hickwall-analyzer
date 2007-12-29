@@ -34,11 +34,17 @@ public abstract class DictionaryTest extends TestCase {
 	 */
 	protected abstract Dictionary getDictionary();
 	
+	/**
+	 * 测试新增一个null到词典
+	 */
 	public void testInsertNll(){
 		this.dictionary.insertWord((String)null);
 		assertFalse(this.dictionary.match(null));
 	}
 	
+	/**
+	 * 测试插入空白字符到词典
+	 */
 	public void testInsertBlankWord(){
 		for(String word : blankWords){
 			this.dictionary.insertWord(word);
@@ -48,6 +54,9 @@ public abstract class DictionaryTest extends TestCase {
 		}
 	}
 	
+	/**
+	 * 测试插入重复的词到词典
+	 */
 	public void testInsertSameWord(){
 		String same = "相同";
 		this.dictionary.insertWord(same);
@@ -58,5 +67,25 @@ public abstract class DictionaryTest extends TestCase {
 		assertFalse(this.dictionary.match(same));
 	}
 	
+	/**
+	 * 测试插入单字的情况
+	 */
+	public void testInsertSingleWord(){
+		String s = "关";
+		this.dictionary.insertWord(s);
+		assertFalse(this.dictionary.match(s));	
+	}	
 	
+	/**
+	 * 测试插入多个词到词典的情况
+	 */
+	public void  testInsertSeveralWords(){
+		String [] strArr = {"中文", "分词","技术"};
+		for(int i=0; i<strArr.length; i++){
+			this.dictionary.insertWord(strArr[i]);
+		}
+		for(int i=0; i<strArr.length; i++){
+			assertTrue(this.dictionary.match(strArr[i]));
+		}
+	}
 }
