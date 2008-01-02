@@ -73,7 +73,7 @@ public abstract class DictionaryTest extends TestCase {
 	public void testInsertSingleWord(){
 		String s = "นุ";
 		this.dictionary.insertWord(s);
-		assertFalse(this.dictionary.match(s));	
+		assertTrue(this.dictionary.match(s));	
 	}	
 	
 	/**
