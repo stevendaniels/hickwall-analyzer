@@ -6,7 +6,6 @@
  */
 package com.novse.segmentation.spring.aop.advice;
 
-
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.log4j.Level;
