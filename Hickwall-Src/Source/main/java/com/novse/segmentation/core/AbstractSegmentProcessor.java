@@ -22,13 +22,13 @@ import com.novse.segmentation.lucene.analysis.StopWordMaker;
 /**
  * 基于词典匹配的中文分词抽象类
  * 
- * @author Mac Kwan 
+ * @author Mac Kwan
  */
 public abstract class AbstractSegmentProcessor implements SegmentProcessor
 {
     /**
      * 词典操作类
-     *
+     * 
      */
     protected Dictionary dic = null;
 
