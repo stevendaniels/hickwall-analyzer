@@ -113,12 +113,17 @@ public class ChineseNameDictionary extends AbstractDictionary implements
     public void deleteWord(String word)
     {
         // 判断是否已初始化名字记录
-        if (this.nameDic == null || this.map == null)
+        if (isEmpty())
             return;
-        if (word == null || !StringUtils.isBlank(word))
+
+        // 判断词汇是否为空字符串
+        if (StringUtils.isBlank(word))
             return;
+        // 去除多余空格
+        word = word.trim();
         if (word.length() > 4 || word.length() < 2)
             return;
+
         // 判断是否有此名字
         if (!this.nameDic.match(word))
             return;
@@ -200,6 +205,42 @@ public class ChineseNameDictionary extends AbstractDictionary implements
     }
 
     /**
+     * 获取汉字ch的姓名统计信息
+     * 
+     * @param ch
+     *            汉字
+     * @return 汉字的姓名统计信息
+     */
+    public ChineseNameCharInfo getChineseNameCharInfo(String ch)
+    {
+        return this.map.get(ch);
+    }
+
+    /**
+     * @return 返回 firstNameCount。
+     */
+    public int getFirstNameCount()
+    {
+        return firstNameCount;
+    }
+
+    /**
+     * @return 返回 firstNameDic。
+     */
+    public ChineseFirstNameDictionary getFirstNameDic()
+    {
+        return firstNameDic;
+    }
+
+    /**
+     * @return 返回 givenNameCount。
+     */
+    public int getGivenNameCount()
+    {
+        return givenNameCount;
+    }
+
+    /**
      * 将词汇word插入到词典文件中
      * 
      * @param word
@@ -212,10 +253,15 @@ public class ChineseNameDictionary extends AbstractDictionary implements
             this.map = new HashMap<String, ChineseNameCharInfo>();
         if (this.nameDic == null)
             this.nameDic = new HashDictionary();
-        if (word == null || StringUtils.isBlank(word))
+
+        // 判断词汇是否为空字符串
+        if (StringUtils.isBlank(word))
             return;
+        // 去除多余空格
+        word = word.trim();
         if (word.length() > 4 || word.length() < 2)
             return;
+
         // 判断是否已有此中文姓名
         if (this.nameDic.match(word))
             return;
@@ -275,6 +321,18 @@ public class ChineseNameDictionary extends AbstractDictionary implements
     }
 
     /**
+     * 词典是否为空
+     * 
+     * @return 词典是否为空
+     */
+    @Override
+    public boolean isEmpty()
+    {
+        return firstNameDic == null || firstNameDic.isEmpty() || map == null
+                || map.isEmpty() || nameDic == null || nameDic.isEmpty();
+    }
+
+    /**
      * 载入以文本格式存储的词典
      * 
      * @param fileName
@@ -308,7 +366,6 @@ public class ChineseNameDictionary extends AbstractDictionary implements
         }
         catch (IOException e)
         {
-            // TODO 自动生成 catch 块
             e.printStackTrace();
         }
     }
@@ -323,12 +380,17 @@ public class ChineseNameDictionary extends AbstractDictionary implements
     public boolean match(String word)
     {
         // 判断是否已初始化名字记录
-        if (nameDic == null || map == null)
+        if (isEmpty())
             return false;
-        if (word == null || StringUtils.isBlank(word))
+
+        // 判断词汇是否为空字符串
+        if (StringUtils.isBlank(word))
             return false;
+        // 去除多余空格
+        word = word.trim();
         if (word.length() > 4 || word.length() < 2)
             return false;
+
         return this.nameDic.match(word);
     }
 
@@ -344,41 +406,5 @@ public class ChineseNameDictionary extends AbstractDictionary implements
         if (this.nameDic == null || this.map == null)
             return;
         this.nameDic.print(out);
-    }
-
-    /**
-     * @return 返回 firstNameDic。
-     */
-    public ChineseFirstNameDictionary getFirstNameDic()
-    {
-        return firstNameDic;
-    }
-
-    /**
-     * 获取汉字ch的姓名统计信息
-     * 
-     * @param ch
-     *            汉字
-     * @return 汉字的姓名统计信息
-     */
-    public ChineseNameCharInfo getChineseNameCharInfo(String ch)
-    {
-        return this.map.get(ch);
-    }
-
-    /**
-     * @return 返回 firstNameCount。
-     */
-    public int getFirstNameCount()
-    {
-        return firstNameCount;
-    }
-
-    /**
-     * @return 返回 givenNameCount。
-     */
-    public int getGivenNameCount()
-    {
-        return givenNameCount;
     }
 }

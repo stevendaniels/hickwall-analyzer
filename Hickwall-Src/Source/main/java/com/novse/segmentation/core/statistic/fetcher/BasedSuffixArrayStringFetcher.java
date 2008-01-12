@@ -331,7 +331,6 @@ public class BasedSuffixArrayStringFetcher extends AbstractStringFetcher
         }
         catch (IOException e)
         {
-            // TODO 自动生成 catch 块
             e.printStackTrace();
         }
     }

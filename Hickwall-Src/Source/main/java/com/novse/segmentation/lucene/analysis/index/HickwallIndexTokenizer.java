@@ -56,7 +56,6 @@ public class HickwallIndexTokenizer extends Tokenizer
         }
         catch (IOException e)
         {
-            // TODO 自动生成 catch 块
             e.printStackTrace();
         }
     }

@@ -13,6 +13,7 @@ import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -40,18 +41,53 @@ public class SimpleDictionary extends AbstractDictionary implements
      */
     public void deleteWord(String word)
     {
-        // 初始化词典
-        if (this.dic == null)
+        // 判断词典是否为空
+        if (isEmpty())
             return;
 
-        if (word == null || StringUtils.isBlank(word))
+        // 判断词汇是否为空字符串
+        if (StringUtils.isBlank(word))
             return;
+        // 去除多余空格
+        word = word.trim();
+        // 去除单字词
+        if (word.length() == 1)
+            return;
+
         int pos;
+
         // 判断原词典中是否已有该词汇
         if ((pos = Collections.binarySearch(dic, word)) < 0)
             return;
         else
             dic.remove(pos);
+    }
+
+    /**
+     * 将词汇批量插入到词典文件中
+     * 
+     * @param wordList
+     *            待插入词汇列表
+     */
+    @Override
+    public void insertWord(List<String> wordList)
+    {
+        // 判断词典是否已初始化
+        if (dic == null)
+            dic = new ArrayList<String>();
+
+        // 判断待插入词汇列表是否为空
+        if (wordList == null || wordList.size() == 0)
+            return;
+
+        // 剔除列表中空或单字或词典中已有的词汇
+        wordList = this.eliminate(wordList);
+
+        // 加入词汇
+        dic.addAll(wordList);
+
+        // 排序
+        Collections.sort(dic);
     }
 
     /**
@@ -66,13 +102,31 @@ public class SimpleDictionary extends AbstractDictionary implements
         if (this.dic == null)
             dic = new ArrayList<String>();
 
-        if (word == null || StringUtils.isBlank(word))
+        // 判断词汇是否为空字符串
+        if (StringUtils.isBlank(word))
             return;
+        // 去除多余空格
+        word = word.trim();
+        // 去除单字词
+        if (word.length() == 1)
+            return;
+
         // 判断原词典中是否已有该词汇
         if (Collections.binarySearch(dic, word) < 0)
             dic.add(word);
         // 插入后重新排序
         Collections.sort(dic);
+    }
+
+    /**
+     * 词典是否为空
+     * 
+     * @return 词典是否为空
+     */
+    @Override
+    public boolean isEmpty()
+    {
+        return dic == null || dic.isEmpty();
     }
 
     /**
@@ -108,7 +162,6 @@ public class SimpleDictionary extends AbstractDictionary implements
         }
         catch (IOException e)
         {
-            // TODO 自动生成 catch 块
             e.printStackTrace();
         }
     }
@@ -123,10 +176,16 @@ public class SimpleDictionary extends AbstractDictionary implements
     public boolean match(String word)
     {
         // 判断词典是否已初始化
-        if (dic == null)
+        if (isEmpty())
             return false;
 
-        if (word == null || StringUtils.isBlank(word))
+        // 判断词汇是否为空字符串
+        if (StringUtils.isBlank(word))
+            return false;
+        // 去除多余空格
+        word = word.trim();
+        // 去除单字词
+        if (word.length() == 1)
             return false;
 
         int pos = Collections.binarySearch(dic, word);

@@ -54,12 +54,13 @@ public class DiagramDictionary extends AbstractDictionary implements
      */
     public void deleteWord(String word)
     {
-        if (diagramDic == null && otherDic == null)
+        if (isEmpty())
             return;
 
-        if (word == null || StringUtils.isBlank(word))
+        // 判断词汇是否为空字符串
+        if (StringUtils.isBlank(word))
             return;
-        // 去除多于空格
+        // 去除多余空格
         word = word.trim();
         // 过滤单字词操作
         if (word.length() < 2)
@@ -192,7 +193,8 @@ public class DiagramDictionary extends AbstractDictionary implements
         if (otherDic == null)
             otherDic = new HashDictionary();
 
-        if (word == null || StringUtils.isBlank(word))
+        // 判断词汇是否为空字符串
+        if (StringUtils.isBlank(word))
             return;
         // 去除多于空格
         word = word.trim();
@@ -214,6 +216,17 @@ public class DiagramDictionary extends AbstractDictionary implements
         }
         else
             otherDic.insertWord(word);
+    }
+
+    /**
+     * 词典是否为空
+     * 
+     * @return 词典是否为空
+     */
+    @Override
+    public boolean isEmpty()
+    {
+        return diagramDic == null && (otherDic == null || otherDic.isEmpty());
     }
 
     /**
@@ -246,7 +259,6 @@ public class DiagramDictionary extends AbstractDictionary implements
         }
         catch (IOException e)
         {
-            // TODO 自动生成 catch 块
             e.printStackTrace();
         }
     }
@@ -261,13 +273,13 @@ public class DiagramDictionary extends AbstractDictionary implements
     public boolean match(String word)
     {
         // 判断词典是否已初始化
-        if (diagramDic == null)
+        if (isEmpty())
             return false;
 
-        if (word == null || StringUtils.isBlank(word))
+        // 判断词汇是否为空字符串
+        if (StringUtils.isBlank(word))
             return false;
-
-        // 去除多于空格
+        // 去除多余空格
         word = word.trim();
         // 过滤单字词操作
         if (word.length() < 2)

@@ -53,16 +53,25 @@ public class DoubleHashDictionary extends AbstractDictionary implements
     public void deleteWord(String word)
     {
         // 判断词典是否已初始化
-        if (this.indexTable == null)
+        if (isEmpty())
             return;
 
-        if (word == null || StringUtils.isBlank(word))
+        // 判断词汇是否为空字符串
+        if (StringUtils.isBlank(word))
             return;
-
-        // 过滤多于空格
+        // 去除多余空格
         word = word.trim();
+        // 去除单字词
+        if (word.length() == 1)
+            return;
+
         // 获取词长
         int len = word.length();
+
+        // 判断是否大于最大词长
+        if (len > this.maxWordLen)
+            return;
+
         // 判断词长为len的二级索引表（首字hash表）是否为空
         if (this.indexTable[len - 1] == null)
             return;
@@ -108,19 +117,45 @@ public class DoubleHashDictionary extends AbstractDictionary implements
      * @param word
      *            待插入的词汇
      */
+    @SuppressWarnings("unchecked")
     public void insertWord(String word)
     {
-        // 判断词典是否已初始化
-        if (this.indexTable == null)
+        // 判断词汇是否为空字符串
+        if (StringUtils.isBlank(word))
             return;
-
-        if (word == null || StringUtils.isBlank(word))
-            return;
-
-        // 过滤多于空格
+        // 去除多余空格
         word = word.trim();
+        // 去除单字词
+        if (word.length() == 1)
+            return;
+
         // 获取词长
         int len = word.length();
+
+        // 调整词典
+        if (this.indexTable == null || this.maxWordLen < len)
+        {
+            // 保留原有词典
+            Hashtable<String, ArrayList<String>>[] oldIndexTable = this.indexTable;
+
+            // 重新初始化
+            this.indexTable = new Hashtable[len];
+
+            // 判断是否已初始化
+            if (oldIndexTable != null)
+            {
+                // 搬移
+                System.arraycopy(oldIndexTable, 0, indexTable, 0,
+                        oldIndexTable.length);
+
+                // 置空
+                oldIndexTable = null;
+
+                // 调整最大词长
+                this.maxWordLen = len;
+            }
+        }
+
         // 初始化二级索引表（首字hash表）
         if (this.indexTable[len - 1] == null)
             this.indexTable[len - 1] = new Hashtable<String, ArrayList<String>>();
@@ -141,6 +176,17 @@ public class DoubleHashDictionary extends AbstractDictionary implements
 
         Collections.sort(wal);
         this.indexTable[len - 1].put(fch, wal);
+    }
+
+    /**
+     * 词典是否为空
+     * 
+     * @return 词典是否为空
+     */
+    @Override
+    public boolean isEmpty()
+    {
+        return indexTable == null || indexTable.length == 0;
     }
 
     /**
@@ -191,7 +237,6 @@ public class DoubleHashDictionary extends AbstractDictionary implements
         }
         catch (IOException e)
         {
-            // TODO 自动生成 catch 块
             e.printStackTrace();
         }
     }
@@ -206,10 +251,16 @@ public class DoubleHashDictionary extends AbstractDictionary implements
     public boolean match(String word)
     {
         // 判断词典是否已初始化
-        if (this.indexTable == null)
+        if (isEmpty())
             return false;
 
-        if (word == null || StringUtils.isBlank(word))
+        // 判断词汇是否为空字符串
+        if (StringUtils.isBlank(word))
+            return false;
+        // 去除多余空格
+        word = word.trim();
+        // 去除单字词
+        if (word.length() == 1)
             return false;
 
         // 获取词长

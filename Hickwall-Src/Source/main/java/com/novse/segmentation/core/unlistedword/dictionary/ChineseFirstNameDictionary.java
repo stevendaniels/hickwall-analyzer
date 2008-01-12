@@ -43,10 +43,12 @@ public class ChineseFirstNameDictionary extends AbstractDictionary implements
     public void deleteWord(String word)
     {
         // 初始化词典
-        if (this.dic == null)
+        if (isEmpty())
             return;
-        if (word == null || StringUtils.isBlank(word))
+        if (StringUtils.isBlank(word))
             return;
+        // 去除多余空格
+        word = word.trim();
         if (word.length() > 2)
             return;
         // 删除姓氏
@@ -63,12 +65,26 @@ public class ChineseFirstNameDictionary extends AbstractDictionary implements
     {
         if (this.dic == null)
             this.dic = new HashSet<String>();
-        if (word == null || StringUtils.isBlank(word))
+
+        if (StringUtils.isBlank(word))
             return;
+        // 去除多余空格
+        word = word.trim();
         if (word.length() > 2)
             return;
         // 插入姓氏
         this.dic.add(word);
+    }
+
+    /**
+     * 词典是否为空
+     * 
+     * @return 词典是否为空
+     */
+    @Override
+    public boolean isEmpty()
+    {
+        return dic == null || dic.isEmpty();
     }
 
     /**
@@ -99,7 +115,6 @@ public class ChineseFirstNameDictionary extends AbstractDictionary implements
         }
         catch (IOException e)
         {
-            // TODO 自动生成 catch 块
             e.printStackTrace();
         }
     }
@@ -113,10 +128,13 @@ public class ChineseFirstNameDictionary extends AbstractDictionary implements
      */
     public boolean match(String word)
     {
-        if (this.dic == null)
+        if (isEmpty())
             return false;
-        if (word == null || StringUtils.isBlank(word))
+
+        if (StringUtils.isBlank(word))
             return false;
+        // 去除多余空格
+        word = word.trim();
         if (word.length() > 2)
             return false;
 

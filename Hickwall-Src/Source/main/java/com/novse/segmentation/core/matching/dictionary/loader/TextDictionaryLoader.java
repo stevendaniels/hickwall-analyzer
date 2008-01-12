@@ -48,7 +48,6 @@ public class TextDictionaryLoader extends AbstractDictionaryLoader
         }
         catch (Exception e)
         {
-            // TODO 自动生成 catch 块
             e.printStackTrace();
         }
         // 返回结果

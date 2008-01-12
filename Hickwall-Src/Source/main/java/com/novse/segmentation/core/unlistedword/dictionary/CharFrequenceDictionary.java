@@ -177,7 +177,6 @@ public class CharFrequenceDictionary implements Loadable, Serializable
         }
         catch (IOException e)
         {
-            // TODO 自动生成 catch 块
             e.printStackTrace();
         }
     }

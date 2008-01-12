@@ -13,7 +13,10 @@ import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -40,12 +43,19 @@ public class HashDictionary extends AbstractDictionary implements Serializable
      */
     public void deleteWord(String word)
     {
-        // 初始化词典
-        if (this.dic == null)
+        // 判断词典是否为空
+        if (isEmpty())
             return;
 
-        if (word == null || StringUtils.isBlank(word))
+        // 判断词汇是否为空字符串
+        if (StringUtils.isBlank(word))
             return;
+        // 去除多余空格
+        word = word.trim();
+        // 去除单字词
+        if (word.length() == 1)
+            return;
+
         // 截取首字
         String fch = word.substring(0, 1);
         if (dic.containsKey(fch))
@@ -66,6 +76,60 @@ public class HashDictionary extends AbstractDictionary implements Serializable
     }
 
     /**
+     * 将词汇批量插入到词典文件中
+     * 
+     * @param wordList
+     *            待插入词汇列表
+     */
+    @Override
+    public void insertWord(List<String> wordList)
+    {
+        // 初始化词典
+        if (this.dic == null)
+            dic = new Hashtable<String, ArrayList<String>>();
+
+        // 判断待插入词汇列表是否为空
+        if (wordList == null || wordList.size() == 0)
+            return;
+
+        // 剔除列表中空或单字或词典中已有的词汇
+        wordList = this.eliminate(wordList);
+
+        // 记录待插入词汇首字
+        Set<String> fchSet = new HashSet<String>();
+
+        // 遍历待插入词汇
+        for (String word : wordList)
+        {
+            // 截取首字
+            String fch = word.substring(0, 1);
+            // 词汇表
+            ArrayList<String> wal = null;
+            if (dic.containsKey(fch))
+                wal = dic.get(fch);
+            else
+                wal = new ArrayList<String>();
+            // 截取词汇剩余部分
+            String leftWord = word.substring(1);
+
+            // 加入到根据首字记录集中
+            fchSet.add(fch);
+
+            // 插入词汇
+            wal.add(leftWord);
+            dic.put(fch, wal);
+        }
+
+        // 根据首字记录集排序
+        for (String fch : fchSet)
+        {
+            ArrayList<String> wal = dic.get(fch);
+            Collections.sort(wal);
+            dic.put(fch, wal);
+        }
+    }
+
+    /**
      * 将词汇word插入到词典文件中
      * 
      * @param word
@@ -77,8 +141,15 @@ public class HashDictionary extends AbstractDictionary implements Serializable
         if (this.dic == null)
             dic = new Hashtable<String, ArrayList<String>>();
 
-        if (word == null || StringUtils.isBlank(word))
+        // 判断词汇是否为空字符串
+        if (StringUtils.isBlank(word))
             return;
+        // 去除多余空格
+        word = word.trim();
+        // 去除单字词
+        if (word.length() == 1)
+            return;
+
         // 截取首字
         String fch = word.substring(0, 1);
         // 词汇表
@@ -96,6 +167,17 @@ public class HashDictionary extends AbstractDictionary implements Serializable
             Collections.sort(wal);
             dic.put(fch, wal);
         }
+    }
+
+    /**
+     * 词典是否为空
+     * 
+     * @return 词典是否为空
+     */
+    @Override
+    public boolean isEmpty()
+    {
+        return dic == null || dic.isEmpty();
     }
 
     /**
@@ -129,7 +211,6 @@ public class HashDictionary extends AbstractDictionary implements Serializable
         }
         catch (IOException e)
         {
-            // TODO 自动生成 catch 块
             e.printStackTrace();
         }
     }
@@ -144,10 +225,16 @@ public class HashDictionary extends AbstractDictionary implements Serializable
     public boolean match(String word)
     {
         // 判断词典是否已初始化
-        if (dic == null)
+        if (isEmpty())
             return false;
 
-        if (word == null || StringUtils.isBlank(word))
+        // 判断词汇是否为空字符串
+        if (StringUtils.isBlank(word))
+            return false;
+        // 去除多余空格
+        word = word.trim();
+        // 去除单字词
+        if (word.length() == 1)
             return false;
 
         // 截取首字

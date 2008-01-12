@@ -40,16 +40,26 @@ public class TrieTreeDictionary extends AbstractDictionary implements
      */
     public void deleteWord(String word)
     {
-        // 判断当前词库中是否已有词汇word
-        if (!this.match(word))
+        // 判断词典是否已初始化
+        if (isEmpty())
             return;
-        // 判断待删除词汇word是否为空
-        if (word == null || StringUtils.isBlank(word))
+
+        // 判断词汇是否为空字符串
+        if (StringUtils.isBlank(word))
+            return;
+        // 去除多余空格
+        word = word.trim();
+        // 去除单字词
+        if (word.length() == 1)
             return;
 
         // 在末端加上'\0'
         if (!word.endsWith("\0"))
             word = word + "\0";
+
+        // 判断当前词库中是否已有词汇word
+        if (!this.match(word))
+            return;
 
         TreeMap[] mapSet = new TreeMap[word.length()];
         // 当前层HashMap
@@ -70,10 +80,10 @@ public class TrieTreeDictionary extends AbstractDictionary implements
         {
             int limitSize = (i == word.length() - 1 ? 1 : 0);
             if (mapSet[i].size() == limitSize && i > 0)
-                mapSet[i - 1].remove(word.substring(i - 1, i));
+                mapSet[i - 1].remove(word.charAt(i - 1));
             else
             {
-                mapSet[i].remove(word.substring(i, i + 1));
+                mapSet[i].remove(word.charAt(i));
                 break;
             }
         }
@@ -92,8 +102,13 @@ public class TrieTreeDictionary extends AbstractDictionary implements
         if (this.dicMap == null)
             this.dicMap = new TreeMap();
 
-        // 判断待添加词汇word是否为空
-        if (word == null || StringUtils.isBlank(word))
+        // 判断词汇是否为空字符串
+        if (StringUtils.isBlank(word))
+            return;
+        // 去除多余空格
+        word = word.trim();
+        // 去除单字词
+        if (word.length() == 1)
             return;
 
         // 在末端加上'\0'
@@ -124,6 +139,17 @@ public class TrieTreeDictionary extends AbstractDictionary implements
                     tempMap.put(ch, ch);
             }
         }
+    }
+
+    /**
+     * 词典是否为空
+     * 
+     * @return 词典是否为空
+     */
+    @Override
+    public boolean isEmpty()
+    {
+        return dicMap == null || dicMap.isEmpty();
     }
 
     /**
@@ -160,12 +186,10 @@ public class TrieTreeDictionary extends AbstractDictionary implements
         }
         catch (FileNotFoundException e)
         {
-            // TODO 自动生成 catch 块
             e.printStackTrace();
         }
         catch (IOException e)
         {
-            // TODO 自动生成 catch 块
             e.printStackTrace();
         }
 
@@ -181,10 +205,16 @@ public class TrieTreeDictionary extends AbstractDictionary implements
     public boolean match(String word)
     {
         // 当词典尚未初始化则返回false
-        if (this.dicMap == null)
+        if (isEmpty())
             return false;
 
-        if (word == null || StringUtils.isBlank(word))
+        // 判断词汇是否为空字符串
+        if (StringUtils.isBlank(word))
+            return false;
+        // 去除多余空格
+        word = word.trim();
+        // 去除单字词
+        if (word.length() == 1)
             return false;
 
         // 在word末端附加'\0'以避免同一前缀冲突

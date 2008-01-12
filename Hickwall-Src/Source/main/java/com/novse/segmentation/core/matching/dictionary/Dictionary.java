@@ -50,6 +50,13 @@ public interface Dictionary extends Loadable
     public void insertWord(String word);
 
     /**
+     * 词典是否为空
+     * 
+     * @return 词典是否为空
+     */
+    public boolean isEmpty();
+
+    /**
      * 判断输入的字符串是否在词典中
      * 
      * @param word
@@ -65,5 +72,4 @@ public interface Dictionary extends Loadable
      *            输出流
      */
     public void print(PrintStream out);
-
 }

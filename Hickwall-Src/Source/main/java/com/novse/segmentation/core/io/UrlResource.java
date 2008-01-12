@@ -34,7 +34,6 @@ public class UrlResource implements Resource
         }
         catch (MalformedURLException e)
         {
-            // TODO 自动生成 catch 块
             e.printStackTrace();
         }
     }
