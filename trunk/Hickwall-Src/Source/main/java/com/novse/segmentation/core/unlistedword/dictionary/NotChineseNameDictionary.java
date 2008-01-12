@@ -25,11 +25,6 @@ public class NotChineseNameDictionary extends AbstractDictionary implements
         Serializable
 {
     /**
-     * <code>serialVersionUID</code> 的注释
-     */
-    private static final long serialVersionUID = 6644742138143868633L;
-
-    /**
      * 
      * @author Mac Kwan 中文姓氏开头但并非中文姓名的汉字统计信息
      */
@@ -68,6 +63,11 @@ public class NotChineseNameDictionary extends AbstractDictionary implements
         }
 
     }
+
+    /**
+     * <code>serialVersionUID</code> 的注释
+     */
+    private static final long serialVersionUID = 6644742138143868633L;
 
     /**
      * 所有伪姓氏出现的次数
@@ -112,12 +112,17 @@ public class NotChineseNameDictionary extends AbstractDictionary implements
     public void deleteWord(String word)
     {
         // 判断是否已初始化名字记录
-        if (this.notNameDic == null || this.map == null)
+        if (isEmpty())
             return;
-        if (word == null || !StringUtils.isBlank(word))
+
+        // 判断词汇是否为空字符串
+        if (StringUtils.isBlank(word))
             return;
+        // 去除多余空格
+        word = word.trim();
         if (word.length() > 4 || word.length() < 2)
             return;
+
         // 判断是否有此名字
         if (!this.notNameDic.match(word))
             return;
@@ -200,6 +205,42 @@ public class NotChineseNameDictionary extends AbstractDictionary implements
     }
 
     /**
+     * @return 返回 firstNameCount。
+     */
+    public int getFirstCount()
+    {
+        return firstCount;
+    }
+
+    /**
+     * @return 返回 firstNameDic。
+     */
+    public ChineseFirstNameDictionary getFirstNameDic()
+    {
+        return firstNameDic;
+    }
+
+    /**
+     * 获取汉字ch的伪姓名统计信息
+     * 
+     * @param ch
+     *            汉字
+     * @return 汉字的姓名统计信息
+     */
+    public NotChineseNameCharInfo getNotChineseNameCharInfo(String ch)
+    {
+        return this.map.get(ch);
+    }
+
+    /**
+     * @return 返回 givenNameCount。
+     */
+    public int getOtherCount()
+    {
+        return otherCount;
+    }
+
+    /**
      * 将词汇word插入到词典文件中
      * 
      * @param word
@@ -212,10 +253,15 @@ public class NotChineseNameDictionary extends AbstractDictionary implements
             this.map = new HashMap<String, NotChineseNameCharInfo>();
         if (this.notNameDic == null)
             this.notNameDic = new HashDictionary();
-        if (word == null || StringUtils.isBlank(word))
+
+        // 判断词汇是否为空字符串
+        if (StringUtils.isBlank(word))
             return;
+        // 去除多余空格
+        word = word.trim();
         if (word.length() > 4 || word.length() < 2)
             return;
+
         // 判断是否已有此中文姓名
         if (this.notNameDic.match(word))
             return;
@@ -275,6 +321,18 @@ public class NotChineseNameDictionary extends AbstractDictionary implements
     }
 
     /**
+     * 词典是否为空
+     * 
+     * @return 词典是否为空
+     */
+    @Override
+    public boolean isEmpty()
+    {
+        return firstNameDic == null || firstNameDic.isEmpty() || map == null
+                || map.isEmpty() || notNameDic == null || notNameDic.isEmpty();
+    }
+
+    /**
      * 载入以文本格式存储的词典
      * 
      * @param fileName
@@ -308,7 +366,6 @@ public class NotChineseNameDictionary extends AbstractDictionary implements
         }
         catch (IOException e)
         {
-            // TODO 自动生成 catch 块
             e.printStackTrace();
         }
     }
@@ -323,12 +380,17 @@ public class NotChineseNameDictionary extends AbstractDictionary implements
     public boolean match(String word)
     {
         // 判断是否已初始化名字记录
-        if (notNameDic == null || map == null)
+        if (isEmpty())
             return false;
-        if (word == null || StringUtils.isBlank(word))
+
+        // 判断词汇是否为空字符串
+        if (StringUtils.isBlank(word))
             return false;
+        // 去除多余空格
+        word = word.trim();
         if (word.length() > 4 || word.length() < 2)
             return false;
+
         return this.notNameDic.match(word);
     }
 
@@ -344,41 +406,5 @@ public class NotChineseNameDictionary extends AbstractDictionary implements
         if (this.notNameDic == null || this.map == null)
             return;
         this.notNameDic.print(out);
-    }
-
-    /**
-     * @return 返回 firstNameDic。
-     */
-    public ChineseFirstNameDictionary getFirstNameDic()
-    {
-        return firstNameDic;
-    }
-
-    /**
-     * 获取汉字ch的伪姓名统计信息
-     * 
-     * @param ch
-     *            汉字
-     * @return 汉字的姓名统计信息
-     */
-    public NotChineseNameCharInfo getNotChineseNameCharInfo(String ch)
-    {
-        return this.map.get(ch);
-    }
-
-    /**
-     * @return 返回 firstNameCount。
-     */
-    public int getFirstCount()
-    {
-        return firstCount;
-    }
-
-    /**
-     * @return 返回 givenNameCount。
-     */
-    public int getOtherCount()
-    {
-        return otherCount;
     }
 }

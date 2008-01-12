@@ -84,12 +84,10 @@ public abstract class AbstractSegmentProcessor implements SegmentProcessor
         }
         catch (FileNotFoundException e)
         {
-            // TODO 自动生成 catch 块
             e.printStackTrace();
         }
         catch (IOException e)
         {
-            // TODO 自动生成 catch 块
             e.printStackTrace();
         }
     }

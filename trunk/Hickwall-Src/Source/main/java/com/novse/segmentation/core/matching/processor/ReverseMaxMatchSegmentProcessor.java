@@ -87,12 +87,10 @@ public class ReverseMaxMatchSegmentProcessor extends AbstractSegmentProcessor
             }
             catch (InstantiationException e)
             {
-                // TODO 自动生成 catch 块
                 e.printStackTrace();
             }
             catch (IllegalAccessException e)
             {
-                // TODO 自动生成 catch 块
                 e.printStackTrace();
             }
 

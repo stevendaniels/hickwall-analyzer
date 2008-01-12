@@ -52,12 +52,10 @@ public class TextDictionaryPropertyEditor<T extends Loadable> extends
         }
         catch (InstantiationException e)
         {
-            // TODO 自动生成 catch 块
             e.printStackTrace();
         }
         catch (IllegalAccessException e)
         {
-            // TODO 自动生成 catch 块
             e.printStackTrace();
         }
         finally
