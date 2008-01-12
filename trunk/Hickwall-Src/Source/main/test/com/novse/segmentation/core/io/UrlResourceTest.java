@@ -8,9 +8,6 @@ package com.novse.segmentation.core.io;
 
 import java.net.URL;
 
-import com.novse.segmentation.core.io.Resource;
-import com.novse.segmentation.core.io.UrlResource;
-
 /**
  * @author Mac Kwan 统一资源路径资源类单元测试
  */
