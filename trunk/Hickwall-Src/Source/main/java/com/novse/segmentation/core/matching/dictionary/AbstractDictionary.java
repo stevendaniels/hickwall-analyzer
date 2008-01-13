@@ -107,10 +107,13 @@ public abstract class AbstractDictionary implements Dictionary
             return;
 
         // ÌÞ³ý¿Õ»òÖØ¸´µÄ´Ê»ã
-        wordList = this.eliminate(wordList);
+        //wordList = this.eliminate(wordList);
 
         for (String word : wordList)
-            this.insertWord(word);
+        {
+            if(!this.match(word))
+                this.insertWord(word);
+        }
     }
 
     /**
