@@ -8,6 +8,7 @@ package com.novse.segmentation.core.matching.dictionary;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -55,21 +56,41 @@ public abstract class AbstractDictionary implements Dictionary
      */
     protected List<String> eliminate(List<String> wordList)
     {
-        if (!isEmpty())
+        // 判断待操作词汇列表是否为空
+        if (wordList == null)
+            return null;
+
+        // 获取词典是否为空
+        boolean isEmpty = this.isEmpty();
+
+        ArrayList<String> removeList = new ArrayList<String>();
+        for (int i = 0; i < wordList.size(); i++)
         {
-            ArrayList<String> removeList = new ArrayList<String>();
-            for (int i = 0; i < wordList.size(); i++)
+            String s = wordList.get(i);
+            // 判断字符串是否为空
+            if (StringUtils.isBlank(s))
             {
-                String s = wordList.get(i);
+                removeList.add(s);
+            }
+            else
+            {
                 // 去除多余空格
                 s = s.trim();
                 wordList.set(i, s);
 
-                if (StringUtils.isBlank(s) || s.length() == 1 || this.match(s))
+                if (s.length() == 1 || (!isEmpty && this.match(s)))
                     removeList.add(s);
             }
-            wordList.removeAll(removeList);
         }
+        wordList.removeAll(removeList);
+
+        // 通过HashSet将wordList中重复的词汇去除
+        HashSet<String> wordSet = new HashSet<String>(wordList);
+
+        // 将数据重新填充到
+        wordList.clear();
+        wordList.addAll(wordSet);
+
         return wordList;
     }
 

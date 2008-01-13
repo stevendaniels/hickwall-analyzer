@@ -150,10 +150,10 @@ public class DoubleHashDictionary extends AbstractDictionary implements
 
                 // 置空
                 oldIndexTable = null;
-
-                // 调整最大词长
-                this.maxWordLen = len;
             }
+
+            // 调整最大词长
+            this.maxWordLen = len;
         }
 
         // 初始化二级索引表（首字hash表）

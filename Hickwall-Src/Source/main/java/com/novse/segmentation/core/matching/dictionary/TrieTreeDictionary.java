@@ -40,6 +40,10 @@ public class TrieTreeDictionary extends AbstractDictionary implements
      */
     public void deleteWord(String word)
     {
+        // 判断当前词库中是否已有词汇word
+        if (!this.match(word))
+            return;
+
         // 判断词典是否已初始化
         if (isEmpty())
             return;
@@ -56,10 +60,6 @@ public class TrieTreeDictionary extends AbstractDictionary implements
         // 在末端加上'\0'
         if (!word.endsWith("\0"))
             word = word + "\0";
-
-        // 判断当前词库中是否已有词汇word
-        if (!this.match(word))
-            return;
 
         TreeMap[] mapSet = new TreeMap[word.length()];
         // 当前层HashMap
@@ -98,6 +98,10 @@ public class TrieTreeDictionary extends AbstractDictionary implements
     @SuppressWarnings("unchecked")
     public void insertWord(String word)
     {
+        // 判断词典中是否已有该词汇
+        if (this.match(word))
+            return;
+
         // 判断词典是否已初始化
         if (this.dicMap == null)
             this.dicMap = new TreeMap();
