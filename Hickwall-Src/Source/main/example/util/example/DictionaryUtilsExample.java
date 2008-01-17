@@ -14,22 +14,19 @@
  * under the License.
  * 
  */
-package core.segment.example;
+package util.example;
 
-import java.util.List;
-
-import com.novse.segmentation.core.SegmentProcessor;
 import com.novse.segmentation.core.io.FileResource;
 import com.novse.segmentation.core.io.Resource;
 import com.novse.segmentation.core.matching.dictionary.Dictionary;
-import com.novse.segmentation.core.matching.processor.MaxMatchSegmentProcessor;
 import com.novse.segmentation.util.DictionaryUtils;
 
 /**
- * @author Mac Kwan 基于匹配的分词例子
+ * @author Mac Kwan 词典工具类，用于序列化与反序列化词典实例
  */
-public class MatchingSegmentExample
+public class DictionaryUtilsExample
 {
+
     /**
      * @param args
      */
@@ -41,23 +38,10 @@ public class MatchingSegmentExample
         // 词典接口
         Dictionary dic = DictionaryUtils.createSimpleDictionary(dicResource);
 
-        // 基于匹配的分词处理器
-        SegmentProcessor processor = new MaxMatchSegmentProcessor(dic);
-        // SegmentProcessor processor = new
-        // ReverseMaxMatchSegmentProcessor(dic);
-
-        // 对文件进行分词
-        processor.fileProcessor("news.txt", "result.txt");
-
-        // 对字符串进行分词
-        List<String> result = processor
-                .textProcess("11月29日，原北京师范大学校长、原汕头大学数学研究所所长、中国科学院院士王梓坤先生莅临我校，他通过自己做研究生和指导研究生的亲身经历，在学术交流中心为广大导师和研究生做了题为《研究生教学四十年》的报告。");
-
-        for (String s : result)
-        {
-            System.out.print(s);
-            System.out.print(" ");
-        }
+        if (dic.match("中国"))
+            System.out.print("pass...");
+        else
+            System.out.println("fail...");
     }
 
 }

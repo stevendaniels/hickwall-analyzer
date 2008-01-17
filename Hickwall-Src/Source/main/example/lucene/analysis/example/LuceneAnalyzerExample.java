@@ -1,7 +1,17 @@
-/*
- * @作者:Mac Kwan , 创建日期:2007-12-8
- *
- * 汕头大学03计算机本科
+/* 
+ * Copyright hickwall 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not 
+ * use this file except in compliance with the License. You may obtain a copy 
+ * of the License at 
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0 
+ *   
+ * Unless required by applicable law or agreed to in writing, software 
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
+ * License for the specific language governing permissions and limitations 
+ * under the License.
  * 
  */
 package lucene.analysis.example;
@@ -14,10 +24,12 @@ import org.apache.lucene.analysis.Token;
 import org.apache.lucene.analysis.TokenStream;
 
 import com.novse.segmentation.core.SegmentProcessor;
+import com.novse.segmentation.core.io.FileResource;
+import com.novse.segmentation.core.io.Resource;
 import com.novse.segmentation.core.matching.dictionary.Dictionary;
-import com.novse.segmentation.core.matching.dictionary.SimpleDictionary;
 import com.novse.segmentation.core.matching.processor.MaxMatchSegmentProcessor;
 import com.novse.segmentation.lucene.analysis.query.HickwallQueryAnalyzer;
+import com.novse.segmentation.util.DictionaryUtils;
 
 /**
  * @author Mac Kwan Lucene分析器
@@ -32,11 +44,11 @@ public class LuceneAnalyzerExample
     public static void main(String[] args) throws IOException
     {
         // 中文分词部件
-        // 词典接口
-        Dictionary dic = new SimpleDictionary();
+        // 文本资源
+        Resource dicResource = new FileResource("Dic/Txt/SmallDic.txt");
 
-        // 从文本文件中载入词库
-        dic.loadDictionary("Dic/Txt/SmallDic.txt");
+        // 词典接口
+        Dictionary dic = DictionaryUtils.createSimpleDictionary(dicResource);
 
         // 基于匹配的分词处理器
         SegmentProcessor processor = new MaxMatchSegmentProcessor(dic);

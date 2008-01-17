@@ -1,7 +1,17 @@
-/*
- * @作者:Mac Kwan , 创建日期:2007-12-8
- *
- * 汕头大学03计算机本科
+/* 
+ * Copyright hickwall 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not 
+ * use this file except in compliance with the License. You may obtain a copy 
+ * of the License at 
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0 
+ *   
+ * Unless required by applicable law or agreed to in writing, software 
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
+ * License for the specific language governing permissions and limitations 
+ * under the License.
  * 
  */
 package core.segment.example;
@@ -9,11 +19,13 @@ package core.segment.example;
 import java.util.List;
 
 import com.novse.segmentation.core.SegmentProcessor;
+import com.novse.segmentation.core.io.FileResource;
+import com.novse.segmentation.core.io.Resource;
 import com.novse.segmentation.core.matching.dictionary.Dictionary;
-import com.novse.segmentation.core.matching.dictionary.SimpleDictionary;
 import com.novse.segmentation.core.matching.processor.MaxMatchSegmentProcessor;
 import com.novse.segmentation.core.statistic.fetcher.BasedSuffixArrayStringFetcher;
 import com.novse.segmentation.core.statistic.fetcher.StringFetcher;
+import com.novse.segmentation.util.DictionaryUtils;
 
 /**
  * @author Mac Kwan 与统计识别词汇相结合的中文分词
@@ -26,11 +38,11 @@ public class MatchSegmentWithStatisticExample
      */
     public static void main(String[] args)
     {
-        // 词典接口
-        Dictionary dic = new SimpleDictionary();
+        // 文本资源
+        Resource dicResource = new FileResource("Dic/Txt/SmallDic.txt");
 
-        // 从文本文件中载入词库
-        dic.loadDictionary("Dic/Txt/SmallDic.txt");
+        // 词典接口
+        Dictionary dic = DictionaryUtils.createSimpleDictionary(dicResource);
 
         // 统计识别词汇
         StringFetcher suffixArray = new BasedSuffixArrayStringFetcher(0.8, 0.2);
