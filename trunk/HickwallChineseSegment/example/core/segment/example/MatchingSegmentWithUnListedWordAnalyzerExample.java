@@ -1,7 +1,17 @@
-/*
- * @作者:Mac Kwan , 创建日期:2007-12-8
- *
- * 汕头大学03计算机本科
+/* 
+ * Copyright hickwall 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not 
+ * use this file except in compliance with the License. You may obtain a copy 
+ * of the License at 
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0 
+ *   
+ * Unless required by applicable law or agreed to in writing, software 
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
+ * License for the specific language governing permissions and limitations 
+ * under the License.
  * 
  */
 package core.segment.example;
@@ -9,16 +19,16 @@ package core.segment.example;
 import java.util.List;
 
 import com.novse.segmentation.core.SegmentProcessor;
+import com.novse.segmentation.core.io.FileResource;
+import com.novse.segmentation.core.io.Resource;
 import com.novse.segmentation.core.matching.dictionary.Dictionary;
-import com.novse.segmentation.core.matching.dictionary.HashDictionary;
-import com.novse.segmentation.core.matching.dictionary.SimpleDictionary;
 import com.novse.segmentation.core.matching.processor.MaxMatchSegmentProcessor;
 import com.novse.segmentation.core.unlistedword.UnListedWordAnalyzer;
-import com.novse.segmentation.core.unlistedword.dictionary.ChineseFirstNameDictionary;
 import com.novse.segmentation.core.unlistedword.dictionary.ChineseNameDictionary;
 import com.novse.segmentation.core.unlistedword.dictionary.NotChineseNameDictionary;
 import com.novse.segmentation.core.unlistedword.name.SimpleChineseNameAnalyzer;
 import com.novse.segmentation.proxy.SegmentProcessorUnListedWordProxy;
+import com.novse.segmentation.util.DictionaryUtils;
 
 /**
  * @author Mac Kwan 结合未登录词识别修正的分词
@@ -31,11 +41,11 @@ public class MatchingSegmentWithUnListedWordAnalyzerExample
      */
     public static void main(String[] args)
     {
-        // 词典接口
-        Dictionary dic = new SimpleDictionary();
+        // 文本资源
+        Resource dicResource = new FileResource("Dic/Txt/SmallDic.txt");
 
-        // 从文本文件中载入词库
-        dic.loadDictionary("Dic/Txt/SmallDic.txt");
+        // 词典接口
+        Dictionary dic = DictionaryUtils.createSimpleDictionary(dicResource);
 
         // 基于匹配的分词处理器
         SegmentProcessor target = new MaxMatchSegmentProcessor(dic);
@@ -43,26 +53,37 @@ public class MatchingSegmentWithUnListedWordAnalyzerExample
         // ReverseMaxMatchSegmentProcessor(dic);
 
         // 未登录词识别
-        // 姓氏词典
-        ChineseFirstNameDictionary firstNameDic = new ChineseFirstNameDictionary();
-        firstNameDic.loadDictionary("Dic/Txt/FirstName.txt");
+
+        // 中文姓氏资源
+        Resource firstNameDicResource = new FileResource(
+                "Dic/Txt/FirstName.txt");
+        // 中文姓名资源
+        Resource chineseNameDicResource = new FileResource("Dic/Txt/Name.txt");
+        // 伪中文姓名资源
+        Resource notChineseNameDicResource = new FileResource(
+                "Dic/Txt/UnName.txt");
 
         // 中文姓名词典
-        ChineseNameDictionary nameDic = new ChineseNameDictionary(firstNameDic);
-        nameDic.loadDictionary("Dic/Txt/Name.txt");
+        ChineseNameDictionary nameDic = DictionaryUtils
+                .createChineseNameDictionary(firstNameDicResource,
+                        chineseNameDicResource);
 
         // 姓氏开头非中文姓名的词典
-        NotChineseNameDictionary notNameDic = new NotChineseNameDictionary(
-                firstNameDic);
-        notNameDic.loadDictionary("Dic/Txt/UnName.txt");
+        NotChineseNameDictionary notNameDic = DictionaryUtils
+                .createNotChineseNameDictionary(firstNameDicResource,
+                        notChineseNameDicResource);
 
+        // 左边界词词典资源
+        dicResource = new FileResource("Dic/Txt/LeftVerge.txt");
         // 左边界词词典
-        Dictionary leftVergeDic = new HashDictionary();
-        leftVergeDic.loadDictionary("Dic/Txt/LeftVerge.txt");
+        Dictionary leftVergeDic = DictionaryUtils
+                .createHashDictionary(dicResource);
 
+        // 右边界词词典资源
+        dicResource = new FileResource("Dic/Txt/RightVerge.txt");
         // 右边界词词典
-        Dictionary rightVergeDic = new HashDictionary();
-        rightVergeDic.loadDictionary("Dic/Txt/RightVerge.txt");
+        Dictionary rightVergeDic = DictionaryUtils
+                .createHashDictionary(dicResource);
 
         // 未登录词识别分析器
         UnListedWordAnalyzer analyzer = new SimpleChineseNameAnalyzer(nameDic,
