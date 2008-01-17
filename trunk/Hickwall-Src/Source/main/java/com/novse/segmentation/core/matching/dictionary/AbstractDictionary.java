@@ -1,7 +1,17 @@
-/*
- * @作者:Hades , 创建日期:Apr 23, 2007
- *
- * 汕头大学03计算机本科
+/* 
+ * Copyright hickwall 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not 
+ * use this file except in compliance with the License. You may obtain a copy 
+ * of the License at 
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0 
+ *   
+ * Unless required by applicable law or agreed to in writing, software 
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
+ * License for the specific language governing permissions and limitations 
+ * under the License.
  * 
  */
 package com.novse.segmentation.core.matching.dictionary;
@@ -107,11 +117,11 @@ public abstract class AbstractDictionary implements Dictionary
             return;
 
         // 剔除空或重复的词汇
-        //wordList = this.eliminate(wordList);
+        // wordList = this.eliminate(wordList);
 
         for (String word : wordList)
         {
-            if(!this.match(word))
+            if (!this.match(word))
                 this.insertWord(word);
         }
     }
@@ -130,14 +140,6 @@ public abstract class AbstractDictionary implements Dictionary
      * @return 词典是否为空
      */
     abstract public boolean isEmpty();
-
-    /**
-     * 载入以文本格式存储的词典
-     * 
-     * @param fileName
-     *            词典的文件名
-     */
-    abstract public void loadDictionary(String fileName);
 
     /**
      * 判断输入的字符串是否在词典中

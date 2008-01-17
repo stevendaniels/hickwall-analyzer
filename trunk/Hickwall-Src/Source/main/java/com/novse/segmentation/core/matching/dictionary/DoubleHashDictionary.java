@@ -1,20 +1,26 @@
-/*
- * @作者:Hades , 创建日期:2006-11-17
- *
- * 汕头大学03计算机本科
+/* 
+ * Copyright hickwall 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not 
+ * use this file except in compliance with the License. You may obtain a copy 
+ * of the License at 
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0 
+ *   
+ * Unless required by applicable law or agreed to in writing, software 
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
+ * License for the specific language governing permissions and limitations 
+ * under the License.
  * 
  */
 package com.novse.segmentation.core.matching.dictionary;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
-import java.util.LinkedList;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -187,58 +193,6 @@ public class DoubleHashDictionary extends AbstractDictionary implements
     public boolean isEmpty()
     {
         return indexTable == null || indexTable.length == 0;
-    }
-
-    /**
-     * 载入以文本格式存储的词典
-     * 
-     * @param fileName
-     *            词典的文件名
-     */
-    @SuppressWarnings("unchecked")
-    public void loadDictionary(String fileName)
-    {
-        try
-        {
-            // 初始化输入流
-            BufferedReader in = new BufferedReader(new FileReader(fileName));
-            String word = null;
-            // 初始化记录链表
-            LinkedList<String> wordLink = new LinkedList<String>();
-            // 最大词长
-            this.maxWordLen = 0;
-
-            // 读取词典
-            while ((word = in.readLine()) != null)
-            {
-                // 插入词汇
-                if (!StringUtils.isBlank(word))
-                {
-                    word = word.trim();
-                    if (word.length() > this.maxWordLen)
-                        this.maxWordLen = word.length();
-                    wordLink.add(word);
-                    this.wordCount++;
-                }
-            }
-            // 关闭输入流
-            in.close();
-
-            // 初始化一级索引表（词长索引表）
-            this.indexTable = new Hashtable[this.maxWordLen];
-            // 重新遍历词典链表
-            for (String w : wordLink)
-            {
-                // 插入词汇
-                this.insertWord(w);
-            }
-            // 回收资源
-            wordLink.clear();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
     }
 
     /**

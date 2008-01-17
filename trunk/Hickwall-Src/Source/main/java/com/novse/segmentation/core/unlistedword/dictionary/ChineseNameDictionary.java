@@ -1,21 +1,27 @@
-/*
- * @作者:Hades , 创建日期:May 15, 2007
- *
- * 汕头大学03计算机本科
+/* 
+ * Copyright hickwall 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not 
+ * use this file except in compliance with the License. You may obtain a copy 
+ * of the License at 
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0 
+ *   
+ * Unless required by applicable law or agreed to in writing, software 
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
+ * License for the specific language governing permissions and limitations 
+ * under the License.
  * 
  */
 package com.novse.segmentation.core.unlistedword.dictionary;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.HashMap;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.novse.segmentation.core.Loadable;
 import com.novse.segmentation.core.matching.dictionary.AbstractDictionary;
 import com.novse.segmentation.core.matching.dictionary.HashDictionary;
 
@@ -23,7 +29,7 @@ import com.novse.segmentation.core.matching.dictionary.HashDictionary;
  * @author Mac Kwan 中文姓名词典操作类
  */
 public class ChineseNameDictionary extends AbstractDictionary implements
-        Serializable, Loadable
+        Serializable
 {
     /**
      * 
@@ -330,44 +336,6 @@ public class ChineseNameDictionary extends AbstractDictionary implements
     {
         return firstNameDic == null || firstNameDic.isEmpty() || map == null
                 || map.isEmpty() || nameDic == null || nameDic.isEmpty();
-    }
-
-    /**
-     * 载入以文本格式存储的词典
-     * 
-     * @param fileName
-     *            词典的文件名
-     */
-    public void loadDictionary(String fileName)
-    {
-        // 初始化词典
-        if (this.map == null)
-            this.map = new HashMap<String, ChineseNameCharInfo>();
-        if (this.nameDic == null)
-            this.nameDic = new HashDictionary();
-        this.firstNameCount = 0;
-        this.givenNameCount = 0;
-
-        try
-        {
-            // 初始化输入流
-            BufferedReader in = new BufferedReader(new FileReader(fileName));
-            String word = null;
-
-            // 读取词典
-            while ((word = in.readLine()) != null)
-            {
-                // 插入词汇
-                if (!StringUtils.isBlank(word))
-                    this.insertWord(word.trim());
-            }
-            // 关闭输入流
-            in.close();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
     }
 
     /**
