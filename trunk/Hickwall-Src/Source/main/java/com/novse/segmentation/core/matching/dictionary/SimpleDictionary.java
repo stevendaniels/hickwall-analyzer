@@ -154,9 +154,9 @@ public class SimpleDictionary extends AbstractDictionary implements
             return false;
         // 去除多余空格
         word = word.trim();
-        // 去除单字词
+        // 单字成词
         if (word.length() == 1)
-            return false;
+            return true;
 
         int pos = Collections.binarySearch(dic, word);
         if (pos >= 0)

@@ -180,9 +180,9 @@ public class TrieTreeDictionary extends AbstractDictionary implements
             return false;
         // 去除多余空格
         word = word.trim();
-        // 去除单字词
+        // 单字成词
         if (word.length() == 1)
-            return false;
+            return true;
 
         // 在word末端附加'\0'以避免同一前缀冲突
         if (!word.endsWith("\0"))

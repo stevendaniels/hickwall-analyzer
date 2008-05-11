@@ -213,9 +213,9 @@ public class DoubleHashDictionary extends AbstractDictionary implements
             return false;
         // 去除多余空格
         word = word.trim();
-        // 去除单字词
+        // 单字成词
         if (word.length() == 1)
-            return false;
+            return true;
 
         // 获取词长
         int len = word.length();

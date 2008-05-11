@@ -254,9 +254,9 @@ public class DiagramDictionary extends AbstractDictionary implements
             return false;
         // 去除多余空格
         word = word.trim();
-        // 过滤单字词操作
-        if (word.length() < 2)
-            return false;
+        // 单字成词
+        if (word.length() == 1)
+            return true;
 
         if (word.length() == 2)
         {

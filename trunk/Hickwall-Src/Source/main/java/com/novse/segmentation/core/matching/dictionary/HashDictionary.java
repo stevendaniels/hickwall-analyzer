@@ -205,9 +205,9 @@ public class HashDictionary extends AbstractDictionary implements Serializable
             return false;
         // 去除多余空格
         word = word.trim();
-        // 去除单字词
+        // 单字成词
         if (word.length() == 1)
-            return false;
+            return true;
 
         // 截取首字
         String fch = word.substring(0, 1);
