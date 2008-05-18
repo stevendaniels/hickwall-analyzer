@@ -24,6 +24,11 @@ import com.novse.segmentation.core.SegmentProcessor;
 public class HickwallIndexTokenizer extends Tokenizer
 {
     /**
+     * 字符缓冲数组大小
+     */
+    private static final int CHAR_BUFFER_SIZE = 512;
+
+    /**
      * 存放Token序列的列表
      */
     private List<Token> list = null;
@@ -88,14 +93,18 @@ public class HickwallIndexTokenizer extends Tokenizer
         int posIndex = 0;
 
         // 初始化输入输出
-        BufferedReader in = new BufferedReader(this.input);
+        Reader bufferReader = null;
+        if (this.input instanceof BufferedReader)
+            bufferReader = this.input;
+        else
+            bufferReader = new BufferedReader(this.input);
         // 读入数据
-        String line = null;
+        char[] cbuffer = new char[CHAR_BUFFER_SIZE];
+        int pos = -1;
         StringBuffer buffer = new StringBuffer();
-        while ((line = in.readLine()) != null)
+        while ((pos = bufferReader.read(cbuffer)) >= 0)
         {
-            buffer.append(line.toLowerCase());
-            buffer.append(System.getProperties().getProperty("line.separator"));
+            buffer.append(cbuffer, 0, pos);
         }
         // 关闭输入流
         this.close();
